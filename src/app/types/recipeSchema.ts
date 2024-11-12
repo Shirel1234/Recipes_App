@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { Document } from "mongoose"
 
 const Recipe = z.object({
     name: z.string().min(2, "Name must be at least 2 characters"),
@@ -10,5 +11,16 @@ const Recipe = z.object({
 
   });
 
-  export type RecipeType = z.infer<typeof Recipe>;
+export type RecipeType = z.infer<typeof Recipe>;
+
+export  interface IRecipe extends Document{
+
+    name: string
+    category:string,
+    image: string,
+    ingredients: [string]
+    instructions: string
+    isFavorite: boolean
+}
+
 export default Recipe
