@@ -11,5 +11,5 @@ const RecipeSchema: Schema<RecipeType>=new Schema({
     isFavorite: {type: Boolean, required: true},
 })
 
-const Book: Model<RecipeType> = mongoose.models.Book || mongoose.model<RecipeType>('Recipe', RecipeSchema);
-export default Book;
+const Recipe: Model<RecipeType> = mongoose.models.Recipe || mongoose.model<RecipeType>('Recipe', RecipeSchema);
+export default Recipe;
