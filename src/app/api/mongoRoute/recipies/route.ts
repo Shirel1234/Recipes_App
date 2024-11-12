@@ -11,6 +11,7 @@ export async function GET() {
     } catch (error) {
         return NextResponse.json({ message: 'Error fetching recipes', error }, { status: 500 });
     }
+
 }
 
 // POST a new recipe
