@@ -1,6 +1,9 @@
+import RecipeList from "./components/List_Recipes";
 
 export default function Home() {
   return (
-   <div></div>
+   <div>
+    <RecipeList/>
+   </div>
   );
 }
