@@ -3,11 +3,12 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createRecipe } from '@/app/services/recipeServices';
 import { Recipe } from '@/app/types/recipeSchema';
+import toast, { Toaster } from 'react-hot-toast';
 
 type Errors = {
   name?: string[];
   category?: string[];
-  image?: string[];
+  imageUrl?: string[];
   ingredients?: string[];
   instructions?: string[];
 };
@@ -15,7 +16,7 @@ type Errors = {
 const AddRecipeForm = () => {
   const [name, setName] = useState('');
   const [category, setCategory] = useState<string>('');;
-  const [image, setImage] = useState('');
+  const [imageUrl, setimageUrl] = useState<string>('');
   const [ingredients, setIngredients] = useState(['']);
   const [instructions, setInstructions] = useState('');
   const [isFavorite, setIsFavorite] = useState(false);
@@ -36,36 +37,57 @@ const AddRecipeForm = () => {
     'Beverage',
   ];
 
+  const handleInputChange = (field: keyof Errors, value: string) => {
+    setErrors((prevErrors) => ({ ...prevErrors, [field]: undefined }));
+    switch (field) {
+      case "name":
+        setName(value);
+        break;
+      case "category":
+        setCategory(value);
+        break;
+      case "imageUrl":
+        setimageUrl(value);
+        break;
+      case "instructions":
+        setInstructions(value);
+        break;
+    }
+  };
+
   const handleAddIngredient = () => {
     setIngredients([...ingredients, '']);
   };
 
   const handleIngredientChange = (index: number, value: string) => {
-    const newIngredients = [...ingredients];
-    newIngredients[index] = value;
-    setIngredients(newIngredients);
+    setIngredients((prevIngredients) => {
+      const newIngredients = [...prevIngredients];
+      newIngredients[index] = value;
+      return newIngredients;
+    });
+    setErrors((prevErrors) => ({ ...prevErrors, ingredients: undefined }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log({ name, category, imageUrl, ingredients, instructions });
 
-    // Check if required fields are filled
-    if (!name || !category || !image || !ingredients.length || !instructions) {
-      alert("Please fill all the required fields.");
+    if (!name || !category || !imageUrl || !ingredients.length || !instructions) {
+      toast.error("Please fill all the required fields.");
       return;
     }
 
     const recipeData = {
       name,
       category,
-      image,
+      imageUrl,
       ingredients,
       instructions,
       isFavorite,
     };
 
     const validation = Recipe.safeParse(recipeData);
-    console.log(validation); 
+
     if (!validation.success) {
       const formattedErrors = validation.error.flatten().fieldErrors;
       setErrors(formattedErrors);
@@ -74,14 +96,23 @@ const AddRecipeForm = () => {
 
     try {
       await createRecipe(recipeData);
-      alert("recipe added succesfully");
+      toast.success("Recipe added successfully");
+
+      setName('');
+      setCategory('');
+      setimageUrl('');
+      setIngredients(['']);
+      setInstructions('');
+      setIsFavorite(false);
+      setErrors({});
     } catch (error) {
       console.error('Failed to add recipe:', error);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-md">
+    <form onSubmit={handleSubmit} className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
+      <Toaster/>
       <button
         type="button"
         onClick={() => router.push('/')}
@@ -92,95 +123,97 @@ const AddRecipeForm = () => {
       
       <h1 className="text-2xl font-semibold mb-6">Add Recipe</h1>
 
-      <label className="block mb-4">
-        <span className="text-gray-700">Dish Name</span>
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Dish Name"
-          className="mt-1 block w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400"
-        />
-        {errors.name && <p className="text-red-500 text-sm">{errors.name[0]}</p>}
-      </label>
-
-      <label className="block mb-4">
-        <span className="text-gray-700">Category</span>
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="mt-1 block w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400"
-        >
-          <option value="" disabled>Select a category</option>
-          {categories.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
-            </option>
-          ))}
-        </select>
-        {errors.category && <p className="text-red-500 text-sm">{errors.category[0]}</p>}
-      </label>
-
-      <label className="block mb-4">
-        <span className="text-gray-700">Image URL</span>
-        <input
-          value={image}
-          onChange={(e) => setImage(e.target.value)}
-          placeholder="Image URL"
-          className="mt-1 block w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400"
-        />
-        {errors.image && <p className="text-red-500 text-sm">{errors.image[0]}</p>}
-      </label>
-
-      <div className="mb-4">
-        <span className="text-gray-700">Ingredients</span>
-        {ingredients.map((ingredient, index) => (
-          <div key={index} className="flex items-center mt-1">
+      <div className="flex gap-6">
+        <div className="flex-1">
+          <label className="block mb-4">
             <input
-              value={ingredient}
-              onChange={(e) => handleIngredientChange(index, e.target.value)}
-              placeholder="Ingredient"
-              className="block w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400"
+              value={name}
+              onChange={(e) => handleInputChange("name", e.target.value)}
+              placeholder="Dish Name"
+              className="mt-1 block w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400"
             />
+            {errors.name && <p className="text-red-500 text-sm">{errors.name[0]}</p>}
+          </label>
+
+          <label className="block mb-4">
+            <select
+              value={category}
+              onChange={(e) => handleInputChange("category", e.target.value)}
+              className="mt-1 block w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400"
+            >
+              <option value="" disabled>Select a category</option>
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+            {errors.category && <p className="text-red-500 text-sm">{errors.category[0]}</p>}
+          </label>
+
+          <label className="block mb-4">
+            <input
+              value={imageUrl}
+              onChange={(e) => handleInputChange("imageUrl", e.target.value)}
+              placeholder="Image URL"
+              className="mt-1 block w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400"
+            />
+            {errors.imageUrl && <p className="text-red-500 text-sm">{errors.imageUrl[0]}</p>}
+          </label>
+
+          <div className="mb-4">
+            {ingredients.map((ingredient, index) => (
+              <div key={index} className="flex items-center mt-1">
+                <input
+                  value={ingredient}
+                  onChange={(e) => handleIngredientChange(index, e.target.value)}
+                  placeholder="Ingredient"
+                  className="block w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400"
+                />
+              </div>
+            ))}
+            {errors.ingredients && <p className="text-red-500 text-sm">{errors.ingredients[0]}</p>}
+            <button
+              type="button"
+              onClick={handleAddIngredient}
+              className="mt-2 text-sm text-blue-600 hover:underline"
+            >
+              + Add another ingredient
+            </button>
           </div>
-        ))}
-        {errors.ingredients && <p className="text-red-500 text-sm">{errors.ingredients[0]}</p>}
-        <button
-          type="button"
-          onClick={handleAddIngredient}
-          className="mt-2 text-sm text-blue-600 hover:underline"
-        >
-          + Add another ingredient
-        </button>
+
+          <label className="flex items-center mb-6">
+            <input
+              type="checkbox"
+              checked={isFavorite}
+              onChange={() => setIsFavorite(!isFavorite)}
+              className="mr-2"
+            />
+            <span className="text-gray-700">Favorite</span>
+          </label>
+        </div>
+
+        <div className="flex-1">
+          <label className="block mb-6">
+            <textarea
+              value={instructions}
+              onChange={(e) => handleInputChange("instructions", e.target.value)}
+              placeholder="Instructions"
+              className="mt-1 block w-full h-64 px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400"
+            />
+            {errors.instructions && <p className="text-red-500 text-sm">{errors.instructions[0]}</p>}
+          </label>
+        </div>
       </div>
 
-      <label className="block mb-6">
-        <span className="text-gray-700">Instructions</span>
-        <textarea
-          value={instructions}
-          onChange={(e) => setInstructions(e.target.value)}
-          placeholder="Instructions"
-          className="mt-1 block w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400"
-          rows={4}
-        />
-        {errors.instructions && <p className="text-red-500 text-sm">{errors.instructions[0]}</p>}
-      </label>
-
-      <label className="flex items-center mb-6">
-        <input
-          type="checkbox"
-          checked={isFavorite}
-          onChange={() => setIsFavorite(!isFavorite)}
-          className="mr-2"
-        />
-        <span className="text-gray-700">Mark as Favorite</span>
-      </label>
-
-      <button
-        type="submit"
-        className="w-full py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700"
-      >
-        Add Recipe
-      </button>
+      <div className="flex justify-end mt-4">
+        <button
+          type="submit"
+          className="py-2 px-6 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700"
+        >
+          Add Recipe
+        </button>
+      </div>
     </form>
   );
 };
