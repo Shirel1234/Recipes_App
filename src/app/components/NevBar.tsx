@@ -1,11 +1,17 @@
 'use client'
-import React, { useState } from 'react'
 import ButtonLink from './Button';
+import {useCategoryStore, useIsFavoriteStore, useSearchStore} from '../store/recipeStore';
 
 const NevBar = () => {
-   const [category, setCategory] = useState("");
-   const [search, setSearch] = useState("");
-   const categories = ["Appetizers", "Main Course", "Desserts", "Beverages"];
+  const categories = ["Appetizers", "Main Course", "Desserts", "Beverages", "Italian"];
+
+  const categoryStore= useCategoryStore((state)=> state.category);
+  const updateCategory = useCategoryStore((state) => state.updateCategory);
+
+  const searchStore= useSearchStore((state)=>state.searchText);
+  const updateSearchText= useSearchStore((state)=>state.updateSearchText);
+
+  const updateFavorite=useIsFavoriteStore((state)=>state.updateIsFavorite);
 
   return (
     <div className="p-4">
@@ -15,8 +21,8 @@ const NevBar = () => {
         <div className="flex gap-4">
           {/* Pick a Category */}
           <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
+            value={categoryStore}
+            onChange={(e) => updateCategory(e.target.value)}
             className="border border-gray-300 rounded-md p-2"
           >
             <option value="">Pick a Category</option>
@@ -31,8 +37,8 @@ const NevBar = () => {
           <input
             type="text"
             placeholder="Search recipes..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            value={searchStore}
+            onChange={(e) => updateSearchText(e.target.value)}
             className="border border-gray-300 rounded-md p-2"
           />
         </div>
@@ -42,13 +48,19 @@ const NevBar = () => {
 
       {/* Navbar Links */}
       <div className="flex justify-center mb-4 space-x-6">
-        <a href="/all-recipes" className="text-blue-500 hover:underline">
-          All Recipes
-        </a>
-        <a href="/favorites" className="text-blue-500 hover:underline">
-          Favorites
-        </a>
-      </div>
+      <button
+        onClick={() => updateFavorite(false)}
+        className="text-blue-500 hover:underline"
+      >
+        All Recipes
+      </button>
+      <button
+        onClick={() => updateFavorite(true)}
+        className="text-blue-500 hover:underline"
+      >
+        Favorites
+      </button>
+    </div>
     </div>
   )
 }

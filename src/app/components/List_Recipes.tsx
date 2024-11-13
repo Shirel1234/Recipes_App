@@ -3,30 +3,22 @@ import React, { useEffect, useState } from "react";
 import Card_Recipe from "./Card_Recipe";
 import { IRecipe } from "../types/recipeSchema";
 import { getAllRecipes } from "../services/recipeServices";
+import { useCategoryStore, useIsFavoriteStore, useSearchStore } from "../store/recipeStore";
 
 const RecipeList = () => {
-  // const recipes = [
-  //   {
-  //     imageUrl: "https://cdn.dummyjson.com/recipe-images/2.webp",
-  //     name: "Spaghetti",
-  //     category: "Pasta",
-  //     instructions: "Put a cup of flour into the bowl, mix with eggs and salt, knead the dough..."
-  //   },
-  //   {
-  //     imageUrl: "https://cdn.dummyjson.com/recipe-images/5.webp",
-  //     name: "Pizza",
-  //     category: "Italian",
-  //     instructions: "Take the dough and spread it with your hands, add toppings, bake for 20 minutes..."
-  //   }
-  // ];
-
   const [recipes, setRecipes] = useState<IRecipe[]>([]);
+
+  const categoryStore= useCategoryStore((state)=> state.category);
+  const searchStore= useSearchStore((state)=>state.searchText);
+  const isFavorite=useIsFavoriteStore((state)=>state.isFavorite);
+
 
   useEffect(() => {
     const fetchRecipes = async () => {
       try{
       const data = await getAllRecipes();
       setRecipes(data || []);
+
     } catch (error) {
       console.error("Failed to fetch recipes:", error);
       setRecipes([]); 
@@ -35,9 +27,23 @@ const RecipeList = () => {
     fetchRecipes();
   }, []);
 
+  const filteredRecipes = recipes
+  .filter((recipe) => {
+    // Filter by category if category is set, otherwise include all
+    return categoryStore ? recipe.category === categoryStore : true;
+  })
+  .filter((recipe) => {
+    // Filter by search text if search text is set, otherwise include all
+    return searchStore ? recipe.name.toLowerCase().includes(searchStore.toLowerCase()) : true;
+  })
+  .filter((recipe) => {
+    // Filter by favorite status if isFavorite is true, otherwise include all
+    return isFavorite ? recipe.isFavorite : true;
+  });
+ 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      {recipes.map((recipe, index) => (
+      {filteredRecipes.map((recipe, index) => (
         <Card_Recipe
           key={index}
           imageUrl={recipe.imageUrl}
