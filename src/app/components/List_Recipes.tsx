@@ -46,10 +46,11 @@ const RecipeList = () => {
       {filteredRecipes.map((recipe, index) => (
         <Card_Recipe
           key={index}
+          recipe_id={recipe._id}
           imageUrl={recipe.imageUrl}
           name={recipe.name}
           category={recipe.category}
-          introduction={recipe.instructions}
+          instructions={recipe.instructions}
         />
       ))}
     </div>
