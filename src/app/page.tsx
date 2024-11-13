@@ -1,9 +1,11 @@
 import RecipeList from "./components/List_Recipes";
+import NevBar from "./components/NevBar";
 
 export default function Home() {
   return (
-   <div>
-    <RecipeList/>
-   </div>
+    <div>
+      <NevBar />
+      <RecipeList />
+    </div>
   );
 }

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import React from "react";
+import ButtonLink from "./Button";
 
 interface RecipeProps {
   imageUrl: string;
@@ -31,9 +32,10 @@ const Card_Recipe: React.FC<RecipeProps> = ({ imageUrl, name, category, introduc
         <p className="text-gray-700 mt-2">{shortIntroduction}</p>
 
         {/* Read More Button */}
-        <button className="mt-4 px-4 py-2 text-white bg-blue-500 hover:bg-blue-700 rounded-md">
-          Read More
-        </button>
+        {/* <button className="mt-4 px-4 py-2 text-white bg-blue-500 hover:bg-blue-700 rounded-md">
+        Read More
+        </button> */}
+        <ButtonLink href='' text="Read More"/>
       </div>
     </div>
   );
