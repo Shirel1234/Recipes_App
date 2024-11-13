@@ -12,15 +12,15 @@ const Recipe = z.object({
   });
 
 
-interface IRecipe extends Document{
-
+export interface IRecipe extends Document{
+    _id:string
     name: string
     category:string,
     imageUrl: string,
-    ingredients: [string]
+    ingredients: string[]
     instructions: string
     isFavorite: boolean
 }
 
 export { Recipe };
-export type { IRecipe };
+
