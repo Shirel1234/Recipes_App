@@ -7,7 +7,7 @@ const instance = axios.create({
   },
 });
 
-export const createRecipe = async (recipe: { title: string; ingredients: string[]; instructions: string; prepTime: number }) => {
+export const createRecipe = async (recipe: { name: string; category: string; image: string; ingredients: string[]; instructions: string; }) => {
   try {
     const response = await instance.post('/recipes', recipe);
     console.log('Recipe Created:', response.data);
@@ -38,7 +38,7 @@ export const getRecipe = async (id: string) => {
   }
 };
 
-export const updateRecipe = async (id: string, recipe: { title: string; ingredients: string[]; instructions: string; prepTime: number }) => {
+export const updateRecipe = async (id: string, recipe: { name: string; category: string;  image: string; ingredients: string[]; instructions: string; }) => {
   try {
     const response = await instance.put(`/recipes/${id}`, recipe);
     return response.data;
