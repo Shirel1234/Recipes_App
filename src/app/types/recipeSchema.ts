@@ -16,7 +16,7 @@ interface IRecipe extends Document{
 
     name: string
     category:string,
-    image: string,
+    imageUrl: string,
     ingredients: [string]
     instructions: string
     isFavorite: boolean
