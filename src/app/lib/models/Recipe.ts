@@ -1,15 +1,15 @@
 import mongoose, { Model, Schema } from "mongoose";
-import { RecipeType } from "@/app/types/recipeSchema";
+import { IRecipe } from "@/app/types/recipeSchema";
 
 
-const RecipeSchema: Schema<RecipeType>=new Schema({
+const RecipeSchema: Schema<IRecipe>=new Schema({
     name:{type: String, required: true},
-    category:{type: String, required: true, unique: true},
+    category:{type: String, required: true},
     imageUrl: {type: String, required: true},
     ingredients: {type: [String], required: true},
     instructions: {type: String, required: true},
     isFavorite: {type: Boolean, required: true},
 })
 
-const Recipe: Model<RecipeType> = mongoose.models.Recipe || mongoose.model<RecipeType>('Recipe', RecipeSchema);
+const Recipe: Model<IRecipe> = mongoose.models.Recipe || mongoose.model<IRecipe>('Recipe', RecipeSchema);
 export default Recipe;
