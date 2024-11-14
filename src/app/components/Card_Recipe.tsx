@@ -54,11 +54,13 @@ const Card_Recipe: React.FC<RecipeProps> = ({ recipe_id, imageUrl, name, categor
       {/* Recipe Card */}
       <Image src={imageUrl} alt={name} width={400} height={224} className="w-full h-56 object-cover rounded-t-lg" />
       <div className="p-4">
-        <h3 className="text-xl font-semibold">{name}</h3>
+        <div className="flex items-center justify-between mt-2">
+          <h3 className="text-xl font-semibold">{name}</h3>
+          <button onClick={onToggleFavorite} className="ml-4 text-yellow-500">
+            {isFavoriteState ? '★' : '☆'}
+          </button>
+        </div>
         <p className="text-sm text-gray-500">{category}</p>
-        <button onClick={onToggleFavorite} className="ml-4 text-yellow-500">
-          {isFavoriteState ? '★' : '☆'}
-        </button>
         <p className="text-gray-700 mt-2">{shortInstructions}</p>
 
         <button
