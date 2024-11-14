@@ -7,7 +7,7 @@ import { useCategoryStore, useIsFavoriteStore, useSearchStore } from "../store/r
 import ReactPaginate from 'react-paginate';
 
 const RecipeList = () => {
-  const recipesPerPage = 12;
+  const recipesPerPage = 3;
   const [recipes, setRecipes] = useState<IRecipe[]>([]);
   const [currentPage, setCurrentPage] = useState(0); // `react-paginate` is zero-based
 
