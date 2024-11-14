@@ -3,7 +3,18 @@ import ButtonLink from './Button';
 import {useCategoryStore, useIsFavoriteStore, useSearchStore} from '../store/recipeStore';
 
 const NevBar = () => {
-  const categories = ["Appetizers", "Main Course", "Desserts", "Beverages", "Italian"];
+  const categories = [
+    'Italian',
+    'Mexican',
+    'Chinese',
+    'Indian',
+    'French',
+    'Dessert',
+    'Salad',
+    'Soup',
+    'Vegan',
+    'Beverage',
+  ];
 
   const categoryStore= useCategoryStore((state)=> state.category);
   const updateCategory = useCategoryStore((state) => state.updateCategory);
