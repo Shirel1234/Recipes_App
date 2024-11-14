@@ -20,13 +20,13 @@ const useSearchStore = create<SearchState>((set) => ({
 }));
 
 interface FavoriteState {
-    isFavorite: boolean;
+    isFavoriteStore: boolean;
     updateIsFavorite: (isFav: boolean) => void;
 }
 
 const useIsFavoriteStore = create<FavoriteState>((set) => ({
-    isFavorite: false, 
-    updateIsFavorite: (isFav: boolean) => set({ isFavorite: isFav })
+    isFavoriteStore: false, 
+    updateIsFavorite: (isFav: boolean) => set({ isFavoriteStore: isFav })
 }));
 
 export {useCategoryStore, useSearchStore, useIsFavoriteStore};
