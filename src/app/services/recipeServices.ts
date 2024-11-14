@@ -38,7 +38,7 @@ export const getRecipe = async (id: string) => {
   }
 };
 
-export const updateRecipe = async (id: string, recipe: { name: string; category: string;  imageUrl: string; ingredients: string[]; instructions: string; }) => {
+export const updateRecipe = async (id: string, recipe: { name: string; category: string;  imageUrl: string; ingredients: string[]; instructions: string; isFavorite:boolean}) => {
   try {
     const response = await instance.put(`/recipes/${id}`, recipe);
     return response.data;
