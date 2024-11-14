@@ -10,25 +10,22 @@ import { useState } from "react";
 
 const RecipeList = () => {
   const recipesPerPage = 3;
-  const [currentPage, setCurrentPage] = useState(0); // `react-paginate` is zero-based
+  const [currentPage, setCurrentPage] = useState(0);
 
-  const categoryStore= useCategoryStore((state)=> state.category);
-  const searchStore= useSearchStore((state)=>state.searchText);
-  const isFavoriteStore=useIsFavoriteStore((state)=>state.isFavoriteStore);
+  const categoryStore = useCategoryStore((state) => state.category);
+  const searchStore = useSearchStore((state) => state.searchText);
+  const isFavoriteStore = useIsFavoriteStore((state) => state.isFavoriteStore);
 
- // Request query
   const { data: recipes = [], isLoading, error } = useQuery<IRecipe[]>({
     queryKey: ['recipesData'],
     queryFn: getAllRecipes,
   });
-
 
   const onToggleFavorite = async (recipe_id: string, currentFavoriteState: boolean) => {
     try {
       const updatedRecipeList = recipes.map((recipe) =>
         recipe._id === recipe_id ? { ...(recipe as IRecipe), isFavorite: !currentFavoriteState } : recipe
       );
-      // setRecipes(updatedRecipeList);
 
       const updatedRecipe = updatedRecipeList.find(recipe => recipe._id === recipe_id);
       if (updatedRecipe) {
@@ -38,28 +35,15 @@ const RecipeList = () => {
       console.error("Failed to update favorite status:", error);
     }
   };
+
   const filteredRecipes = recipes
-  .filter((recipe) => {
-    // Filter by category if category is set, otherwise include all
-    return categoryStore ? recipe.category === categoryStore : true;
-  })
-  .filter((recipe) => {
-    // Filter by search text if search text is set, otherwise include all
-    return searchStore ? recipe.name.toLowerCase().includes(searchStore.toLowerCase()) : true;
-  })
-  .filter((recipe) => {
-    // Filter by favorite status if isFavorite is true, otherwise include all
-    return isFavoriteStore ? recipe.isFavorite : true;
-  });
+    .filter((recipe) => categoryStore ? recipe.category === categoryStore : true)
+    .filter((recipe) => searchStore ? recipe.name.toLowerCase().includes(searchStore.toLowerCase()) : true)
+    .filter((recipe) => isFavoriteStore ? recipe.isFavorite : true);
 
-    // Request query
-  console.log("yfciytcyi", isLoading) 
-  if (isLoading) return <LoadSpinner/>;
-  if (error instanceof Error) return <div>Error: {error.message}</div>
+  if (isLoading) return <LoadSpinner />;
+  if (error instanceof Error) return <div>Error: {error.message}</div>;
 
- 
-
-  // Calculate indexes for the current page recipes
   const startIndex = currentPage * recipesPerPage;
   const endIndex = startIndex + recipesPerPage;
   const currentRecipes = filteredRecipes.slice(startIndex, endIndex);
@@ -69,8 +53,8 @@ const RecipeList = () => {
   };
 
   return (
-    <div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="w-full max-w-4xl mx-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
         {currentRecipes.map((recipe, index) => (
           <Card_Recipe
             key={index}

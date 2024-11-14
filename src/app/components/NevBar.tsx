@@ -1,6 +1,7 @@
 'use client'
 import ButtonLink from './Button';
-import {useCategoryStore, useIsFavoriteStore, useSearchStore} from '../store/recipeStore';
+import { useCategoryStore, useIsFavoriteStore, useSearchStore } from '../store/recipeStore';
+import { useState } from 'react';
 
 const NevBar = () => {
   const categories = [
@@ -16,21 +17,27 @@ const NevBar = () => {
     'Beverage',
   ];
 
-  const categoryStore= useCategoryStore((state)=> state.category);
+  const categoryStore = useCategoryStore((state) => state.category);
   const updateCategory = useCategoryStore((state) => state.updateCategory);
 
-  const searchStore= useSearchStore((state)=>state.searchText);
-  const updateSearchText= useSearchStore((state)=>state.updateSearchText);
+  const searchStore = useSearchStore((state) => state.searchText);
+  const updateSearchText = useSearchStore((state) => state.updateSearchText);
 
-  const updateFavorite=useIsFavoriteStore((state)=>state.updateIsFavorite);
+  const isFavoriteStore = useIsFavoriteStore((state) => state.isFavoriteStore);
+  const updateFavorite = useIsFavoriteStore((state) => state.updateIsFavorite);
+
+  const [selectedTab, setSelectedTab] = useState(isFavoriteStore ? "Favorites" : "All Recipes");
+
+  const handleTabClick = (tab: string) => {
+    setSelectedTab(tab);
+    updateFavorite(tab === "Favorites");
+  };
 
   return (
-    <div className="p-4">
-      {/* Top Controls */}
-      <h1>Recipes</h1>
+    <div className="sticky top-0 p-4 bg-gray-50 w-full max-w-4xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">Recipes</h1>
       <div className="flex items-center justify-between mb-4">
         <div className="flex gap-4">
-          {/* Pick a Category */}
           <select
             value={categoryStore}
             onChange={(e) => updateCategory(e.target.value)}
@@ -44,7 +51,6 @@ const NevBar = () => {
             ))}
           </select>
 
-          {/* Search Box */}
           <input
             type="text"
             placeholder="Search recipes..."
@@ -53,27 +59,34 @@ const NevBar = () => {
             className="border border-gray-300 rounded-md p-2"
           />
         </div>
-        {/* Add Button */}
+
         <ButtonLink href={'/pages/addRecipe'} text='Add Recipe' />
       </div>
 
-      {/* Navbar Links */}
-      <div className="flex justify-center mb-4 space-x-6">
-      <button
-        onClick={() => updateFavorite(false)}
-        className="text-blue-500 hover:underline"
-      >
-        All Recipes
-      </button>
-      <button
-        onClick={() => updateFavorite(true)}
-        className="text-blue-500 hover:underline"
-      >
-        Favorites
-      </button>
+      <div className="flex border-b-2 border-gray-300 mb-4">
+        <button
+          onClick={() => handleTabClick("All Recipes")}
+          className={`px-4 py-2 ${
+            selectedTab === "All Recipes"
+              ? "font-semibold text-blue-500 border-b-2 border-blue-500"
+              : "text-gray-500 hover:text-blue-500"
+          }`}
+        >
+          All Recipes
+        </button>
+        <button
+          onClick={() => handleTabClick("Favorites")}
+          className={`px-4 py-2 ${
+            selectedTab === "Favorites"
+              ? "font-semibold text-blue-500 border-b-2 border-blue-500"
+              : "text-gray-500 hover:text-blue-500"
+          }`}
+        >
+          Favorites
+        </button>
+      </div>
     </div>
-    </div>
-  )
-}
+  );
+};
 
-export default NevBar
+export default NevBar;

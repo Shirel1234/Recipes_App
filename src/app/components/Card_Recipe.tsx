@@ -10,21 +10,21 @@ interface RecipeProps {
   category: string;
   instructions: string;
   isFavorite: boolean;
-  onToggleFavorite: (recipe_id: string, currentFavoriteState: boolean)=>void;
+  onToggleFavorite: (recipe_id: string, currentFavoriteState: boolean) => void;
 }
 
-const Card_Recipe: React.FC<RecipeProps> = ({ recipe_id, imageUrl, name, category, instructions, isFavorite , onToggleFavorite}) => {
+const Card_Recipe: React.FC<RecipeProps> = ({ recipe_id, imageUrl, name, category, instructions, isFavorite, onToggleFavorite }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const shortInstructions = instructions.length > 50 ? instructions.slice(0, 50) + '...' : instructions;
 
   const handleToggleFavorite = () => {
     onToggleFavorite(recipe_id, isFavorite);
-  }; 
+  };
 
   return (
-    <div className="max-w-xs bg-white rounded-lg shadow-lg overflow-hidden">
+    <div className="max-w-[16rem] bg-white rounded-lg shadow-lg overflow-hidden">
       {/* Recipe Card */}
-      <Image src={imageUrl} alt={name} width={400} height={224} className="w-full h-56 object-cover rounded-t-lg" />
+      <Image src={imageUrl} alt={name} width={400} height={200} className="w-full h-40 object-cover rounded-t-lg" />
       <div className="p-4">
         <div className="flex items-center justify-between mt-2">
           <h3 className="text-xl font-semibold">{name}</h3>
