@@ -63,7 +63,7 @@ const NevBar = () => {
         <ButtonLink href={'/pages/addRecipe'} text='Add Recipe' />
       </div>
 
-      <div className="flex border-b-2 border-gray-300 mb-4">
+      <div className="flex mb-4">
         <button
           onClick={() => handleTabClick("All Recipes")}
           className={`px-4 py-2 ${
