@@ -10,7 +10,7 @@ const RecipeList = () => {
 
   const categoryStore= useCategoryStore((state)=> state.category);
   const searchStore= useSearchStore((state)=>state.searchText);
-  const isFavorite=useIsFavoriteStore((state)=>state.isFavorite);
+  const isFavoriteStore=useIsFavoriteStore((state)=>state.isFavorite);
 
 
   useEffect(() => {
@@ -38,9 +38,9 @@ const RecipeList = () => {
   })
   .filter((recipe) => {
     // Filter by favorite status if isFavorite is true, otherwise include all
-    return isFavorite ? recipe.isFavorite : true;
+    return isFavoriteStore ? recipe.isFavorite : true;
   });
- 
+ console.log("the list: ",filteredRecipes );
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {filteredRecipes.map((recipe, index) => (
@@ -50,7 +50,9 @@ const RecipeList = () => {
           imageUrl={recipe.imageUrl}
           name={recipe.name}
           category={recipe.category}
+          ingredients={recipe.ingredients}
           instructions={recipe.instructions}
+          isFavorite={recipe.isFavorite}
         />
       ))}
     </div>
