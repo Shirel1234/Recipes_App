@@ -46,6 +46,17 @@ const Modal: React.FC<ModalProps> = ({
 
   if (!isOpen) return null;
 
+  const handleToggleFavorite = () => {
+    if (recipe) {
+        // Update the local recipe state
+        setRecipe((prevRecipe) =>
+          prevRecipe
+            ? { ...prevRecipe, isFavorite: !prevRecipe.isFavorite }
+            : prevRecipe
+        );
+    }
+    onToggleFavorite();
+  };
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-3xl mx-auto relative">
@@ -77,7 +88,7 @@ const Modal: React.FC<ModalProps> = ({
               <h2 className="text-2xl font-semibold">{recipe.name}</h2>
               <div className="flex items-center mt-2">
                 <p className="text-lg text-gray-500">{recipe.category}</p>
-                <button onClick={onToggleFavorite} className="ml-4 text-yellow-500">
+                <button onClick={handleToggleFavorite} className="ml-4 text-yellow-500">
                   {recipe.isFavorite ? '★' : '☆'}
                 </button>
               </div>
