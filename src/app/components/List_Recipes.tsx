@@ -35,7 +35,7 @@ const RecipeList = () => {
     // Create an updated recipe object excluding the `_id` field
     const { _id, ...recipeWithoutId } = recipe;
     const updatedRecipe = { ...recipeWithoutId, isFavorite: !currentFavoriteState };
-    await updateRecipe(recipe_id, updatedRecipe);
+    await updateRecipe(_id, updatedRecipe);
 
       // Update the local cache
       queryClient.setQueryData<IRecipe[]>(['recipesData'], (oldData) => {
