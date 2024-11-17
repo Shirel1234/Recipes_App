@@ -115,7 +115,7 @@ const AddRecipeForm = () => {
       <Toaster />
       <button
         type="button"
-        onClick={() => router.push('/')}
+        onClick={() => router.push('/pages/protected')}
         className="absolute top-4 left-4 text-blue-600 font-semibold hover:underline"
       >
         &larr; Back
