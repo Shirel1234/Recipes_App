@@ -8,7 +8,7 @@ export default function Home() {
   const route = useRouter();
   route.push('pages/login');
   return (
-    <div className="max-w-[100rem] mx-auto px-4">
+    <div>
     </div>
   );
 }

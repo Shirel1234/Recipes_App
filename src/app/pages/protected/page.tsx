@@ -29,7 +29,7 @@ const Dashboard = () => {
     }
 
     return (
-        <div className="max-w-[100rem] mx-auto px-4">
+        <div className="">
             <p className="text-center">!הגעת בהצלחה לדף הראשי לאחר ההתחברות</p>
             <NevBar />
             <RecipeList />

@@ -9,7 +9,7 @@ import LoadSpinner from "./LoadSpinner";
 import { useState } from "react";
 
 const RecipeList = () => {
-  const recipesPerPage = 3;
+  const recipesPerPage = 4;
   const [currentPage, setCurrentPage] = useState(0);
 
   const categoryStore = useCategoryStore((state) => state.category);

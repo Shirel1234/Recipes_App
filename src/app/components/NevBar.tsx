@@ -34,7 +34,7 @@ const NevBar = () => {
   };
 
   return (
-    <div className="sticky top-0 p-4 bg-gray-50 w-full max-w-4xl mx-auto">
+    <div className="sticky top-0 bg-gray-50 w-full max-w-4xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">Recipes</h1>
       <div className="flex items-center justify-between mb-4">
         <div className="flex gap-4">
