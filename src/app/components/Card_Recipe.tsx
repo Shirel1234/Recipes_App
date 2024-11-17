@@ -35,15 +35,15 @@ const Card_Recipe: React.FC<RecipeProps> = ({ recipe_id, imageUrl, name, categor
           </div>
           <p className="text-sm text-gray-500">{category}</p>
           <p className="text-gray-700 mt-2">{shortInstructions}</p>
-      </div>
-      <div className="mt-auto bottom-0 px-4 py-2">
-        <button
-              className="px-4 py-2 text-white bg-blue-500 hover:bg-blue-700 rounded-md"
-              onClick={() => setIsModalOpen(true)}
-            >
-              Read More
-        </button>
-      </div>
+        </div>
+        <div className="mt-auto bottom-0 px-4 py-2">
+          <button
+            className="px-4 py-2 text-white bg-blue-500 hover:bg-blue-700 rounded-md"
+            onClick={() => setIsModalOpen(true)}
+          >
+            Read More
+          </button>
+        </div>
       </div>
 
       {/* Modal */}

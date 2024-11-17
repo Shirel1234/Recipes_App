@@ -66,21 +66,19 @@ const NevBar = () => {
       <div className="flex mb-4">
         <button
           onClick={() => handleTabClick("All Recipes")}
-          className={`px-4 py-2 ${
-            selectedTab === "All Recipes"
+          className={`px-4 py-2 ${selectedTab === "All Recipes"
               ? "font-semibold text-blue-500 border-b-2 border-blue-500"
               : "text-gray-500 hover:text-blue-500"
-          }`}
+            }`}
         >
           All Recipes
         </button>
         <button
           onClick={() => handleTabClick("Favorites")}
-          className={`px-4 py-2 ${
-            selectedTab === "Favorites"
+          className={`px-4 py-2 ${selectedTab === "Favorites"
               ? "font-semibold text-blue-500 border-b-2 border-blue-500"
               : "text-gray-500 hover:text-blue-500"
-          }`}
+            }`}
         >
           Favorites
         </button>

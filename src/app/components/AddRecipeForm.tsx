@@ -112,7 +112,7 @@ const AddRecipeForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
-      <Toaster/>
+      <Toaster />
       <button
         type="button"
         onClick={() => router.push('/')}
@@ -120,7 +120,7 @@ const AddRecipeForm = () => {
       >
         &larr; Back
       </button>
-      
+
       <h1 className="text-2xl font-semibold mb-6">Add Recipe</h1>
 
       <div className="flex gap-6">
