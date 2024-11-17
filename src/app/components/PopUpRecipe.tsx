@@ -48,14 +48,14 @@ const Modal: React.FC<ModalProps> = ({
 
   const handleToggleFavorite = () => {
     if (recipe) {
-        // Update the local recipe state
-        setRecipe((prevRecipe) =>
-          prevRecipe
-            ? { ...prevRecipe, isFavorite: !prevRecipe.isFavorite }
-            : prevRecipe
-        );
+      // Update the local recipe state
+      setRecipe((prevRecipe) =>
+        prevRecipe
+          ? { ...prevRecipe, isFavorite: !prevRecipe.isFavorite }
+          : prevRecipe
+      );
     }
-    
+
     onToggleFavorite();
   };
   return (

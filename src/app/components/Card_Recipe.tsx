@@ -17,12 +17,12 @@ interface RecipeProps {
 const Card_Recipe: React.FC<RecipeProps> = ({ recipe_id, imageUrl, name, category, instructions, isFavorite, onToggleFavorite }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isFavoriteStore = useIsFavoriteStore((state) => state.isFavoriteStore);
-  
+
   const shortInstructions = instructions.length > 50 ? instructions.slice(0, 50) + '...' : instructions;
 
   const handleToggleFavorite = () => {
     onToggleFavorite(recipe_id, isFavorite);
-    if(isModalOpen&&isFavoriteStore)
+    if (isModalOpen && isFavoriteStore)
       setIsModalOpen(false);
   };
 
