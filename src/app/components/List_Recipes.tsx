@@ -1,10 +1,10 @@
-'use client'
+'use client';
 import Card_Recipe from "./Card_Recipe";
 import { IRecipe } from "../types/recipeSchema";
 import { getAllRecipes, updateRecipe } from "../services/recipeServices";
 import { useCategoryStore, useIsFavoriteStore, useSearchStore } from "../store/recipeStore";
 import ReactPaginate from 'react-paginate';
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import LoadSpinner from "./LoadSpinner";
 import { useState } from "react";
 
@@ -16,6 +16,8 @@ const RecipeList = () => {
   const searchStore = useSearchStore((state) => state.searchText);
   const isFavoriteStore = useIsFavoriteStore((state) => state.isFavoriteStore);
 
+  const queryClient = useQueryClient();
+
   const { data: recipes = [], isLoading, error } = useQuery<IRecipe[]>({
     queryKey: ['recipesData'],
     queryFn: getAllRecipes,
@@ -23,23 +25,37 @@ const RecipeList = () => {
 
   const onToggleFavorite = async (recipe_id: string, currentFavoriteState: boolean) => {
     try {
-      const updatedRecipeList = recipes.map((recipe) =>
-        recipe._id === recipe_id ? { ...(recipe as IRecipe), isFavorite: !currentFavoriteState } : recipe
-      );
+     // Find the recipe
+    const recipe = recipes.find((recipe) => recipe._id === recipe_id);
+    if (!recipe) {
+      console.error("Recipe not found");
+      return;
+    }
 
-      const updatedRecipe = updatedRecipeList.find(recipe => recipe._id === recipe_id);
-      if (updatedRecipe) {
-        await updateRecipe(recipe_id, updatedRecipe);
-      }
+    // Create an updated recipe object excluding the `_id` field
+    const { _id, ...recipeWithoutId } = recipe;
+    const updatedRecipe = { ...recipeWithoutId, isFavorite: !currentFavoriteState };
+    await updateRecipe(_id, updatedRecipe);
+
+      // Update the local cache
+      queryClient.setQueryData<IRecipe[]>(['recipesData'], (oldData) => {
+        return oldData?.map((recipe) =>
+          recipe._id === recipe_id
+            ? { ...recipe, isFavorite: !currentFavoriteState }
+            : recipe
+        ) as IRecipe[]; // Explicitly cast to IRecipe[]
+      });
     } catch (error) {
       console.error("Failed to update favorite status:", error);
     }
   };
 
   const filteredRecipes = recipes
-    .filter((recipe) => categoryStore ? recipe.category === categoryStore : true)
-    .filter((recipe) => searchStore ? recipe.name.toLowerCase().includes(searchStore.toLowerCase()) : true)
-    .filter((recipe) => isFavoriteStore ? recipe.isFavorite : true);
+    .filter((recipe) => (categoryStore ? recipe.category === categoryStore : true))
+    .filter((recipe) =>
+      searchStore ? recipe.name.toLowerCase().includes(searchStore.toLowerCase()) : true
+    )
+    .filter((recipe) => (isFavoriteStore ? recipe.isFavorite : true));
 
   if (isLoading) return <LoadSpinner />;
   if (error instanceof Error) return <div>Error: {error.message}</div>;
