@@ -25,17 +25,17 @@ const RecipeList = () => {
 
   const onToggleFavorite = async (recipe_id: string, currentFavoriteState: boolean) => {
     try {
-     // Find the recipe
-    const recipe = recipes.find((recipe) => recipe._id === recipe_id);
-    if (!recipe) {
-      console.error("Recipe not found");
-      return;
-    }
+      // Find the recipe
+      const recipe = recipes.find((recipe) => recipe._id === recipe_id);
+      if (!recipe) {
+        console.error("Recipe not found");
+        return;
+      }
 
-    // Create an updated recipe object excluding the `_id` field
-    const { _id, ...recipeWithoutId } = recipe;
-    const updatedRecipe = { ...recipeWithoutId, isFavorite: !currentFavoriteState };
-    await updateRecipe(_id, updatedRecipe);
+      // Create an updated recipe object excluding the `_id` field
+      const { _id, ...recipeWithoutId } = recipe;
+      const updatedRecipe = { ...recipeWithoutId, isFavorite: !currentFavoriteState };
+      await updateRecipe(_id, updatedRecipe);
 
       // Update the local cache
       queryClient.setQueryData<IRecipe[]>(['recipesData'], (oldData) => {
